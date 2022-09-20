@@ -31,6 +31,51 @@ public class Launcher {
           System.out.println("Vous n'avez pas entré un nombre");
         }
       }
+      else if(input.equals("freq")){
+        System.out.println("Donnez moi le chemin de votre fichier");
+        //lire le contenu du fichier et afficher les 3 mots les plus fréquents
+        String path = scanner.nextLine();
+        try{
+          String content = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(path)));
+          //remove all punctuation by replacing it with a space
+          content = content.replaceAll("[^a-zA-Z0-9\\s]", " ");
+          //lowercase all the words
+          content = content.toLowerCase();
+          //split the string into an array of words
+          String[] words = content.split("\\s+");
+          //is blank
+          if(words.length == 0){
+            System.out.println("Le fichier est vide");
+          }
+
+          else{
+            //create a hashmap to store the words and their frequency
+            java.util.HashMap<String, Integer> wordFrequency = new java.util.HashMap<String, Integer>();
+            for(String word : words){
+              if(wordFrequency.containsKey(word)){
+                wordFrequency.put(word, wordFrequency.get(word) + 1);
+              }
+              else{
+                wordFrequency.put(word, 1);
+              }
+            }
+            //sort the hashmap by value
+            java.util.List<java.util.Map.Entry<String, Integer>> sortedWordFrequency = new java.util.ArrayList<java.util.Map.Entry<String, Integer>>(wordFrequency.entrySet());
+            java.util.Collections.sort(sortedWordFrequency, new java.util.Comparator<java.util.Map.Entry<String, Integer>>(){
+              public int compare(java.util.Map.Entry<String, Integer> entry1, java.util.Map.Entry<String, Integer> entry2){
+                return entry2.getValue().compareTo(entry1.getValue());
+              }
+            });
+            //print the 3 most frequent words
+            for(int i = 0; i < 3; i++){
+              System.out.println(sortedWordFrequency.get(i).getKey() + " : " + sortedWordFrequency.get(i).getValue());
+            }
+          }
+
+        } catch (java.io.IOException e) {
+          System.out.println("Le fichier n'existe pas");
+        }
+      }
       else {
         System.out.println("unknown command");
       }
