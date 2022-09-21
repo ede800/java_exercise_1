@@ -29,13 +29,6 @@ public class Launcher {
     
     
 }
-    
-
-
-
-
-
-
 
 interface Command {
   public String name();
@@ -52,7 +45,7 @@ class Quit implements Command {
   }
 }
 
-// refactored Fibo
+// refactored Fibo without references of command names
 class Fibo implements Command {
   public String name() {
     return "fibo";
@@ -69,7 +62,7 @@ class Fibo implements Command {
   }
 }
 
-// refactored Freq
+// refactored Freq without references of command names
 class Freq implements Command {
   public String name() {
     return "freq";
@@ -112,7 +105,8 @@ class Freq implements Command {
   }
 }
 
-// refactored Predict
+
+// refactored Predict without references of command names
 class Predict implements Command {
   public String name() {
     return "predict";
@@ -146,11 +140,7 @@ class Predict implements Command {
       String word = scanner.nextLine();
       if(wordFrequency.containsKey(word)){
         java.util.List<String> list = wordFrequency.get(word);
-        String sentence = "";
-        for(String w : list){
-          sentence += w + " ";
-        }
-        System.out.println(sentence);
+        System.out.println(list.get((int)(Math.random() * list.size())));
       }
       else{
         System.out.println("Le mot n'existe pas");
@@ -161,8 +151,3 @@ class Predict implements Command {
     return false;
   }
 }
-
-
-
-
-
