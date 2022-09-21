@@ -61,7 +61,6 @@ class Fibo implements Command {
     return "fibo";
   }
   public boolean run(Scanner scanner) {
-    Integer n = null;
     System.out.println("Donnez moi un nombre");
     String number = scanner.nextLine();
     try {
@@ -180,14 +179,8 @@ class Predict implements Command {
             sentence += w + " ";
           }
           System.out.println(sentence);
-          
-          
 
-
-        }
-
-        
-        
+        }           
         
       }
     } catch (java.io.IOException e) {
