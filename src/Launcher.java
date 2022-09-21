@@ -165,6 +165,15 @@ class Predict implements Command {
               }
             }
           }
+          //print the most probable sentence
+          java.util.List<java.util.Map.Entry<String, Integer>> sortedWordFrequency = new java.util.ArrayList<java.util.Map.Entry<String, Integer>>(wordFrequency.entrySet());
+          java.util.Collections.sort(sortedWordFrequency, new java.util.Comparator<java.util.Map.Entry<String, Integer>>(){
+            public int compare(java.util.Map.Entry<String, Integer> entry1, java.util.Map.Entry<String, Integer> entry2){
+              return entry2.getValue().compareTo(entry1.getValue());
+            }
+          });
+          System.out.println(sortedWordFrequency.get(0).getKey());
+          
 
           
 
