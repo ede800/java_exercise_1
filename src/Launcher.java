@@ -95,23 +95,23 @@ interface Command {
       new Fibo(),
       new Freq()
     };
-    while (true) {
-
-      
-      String input = scanner.nextLine();
+    String input = null;
+    while (!"quit".equals(input = scanner.nextLine())) {
+      boolean found = false;
       for (Command command : commands) {
         if (command.name().equals(input)) {
-          if (!command.run(scanner)) {
-            return;
-            
-          }
+          found = true;
+          command.run(scanner);
+          break;
         }
-        
       }
-      System.out.println("unknown command");
-
-      
+      if (!found) {
+        System.out.println("unknown command");
+      }
     }
+    
+    
+    
   }
 }
 
