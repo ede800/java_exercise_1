@@ -147,21 +147,15 @@ class Predict implements Command {
           System.out.println("Le mot n'est pas dans le fichier");
         }
         else{
-          //check statisticly the most probable sentence of 20 words after the word
+          //check statisticly the most probable word after the word given
           java.util.HashMap<String, Integer> wordFrequency = new java.util.HashMap<String, Integer>();
-          for(int i = 0; i < words.length; i++){
+          for(int i = 0; i < words.length - 1; i++){
             if(words[i].equals(word)){
-              if(i + 20 < words.length){
-                String sentence = "";
-                for(int j = i + 1; j < i + 21; j++){
-                  sentence += words[j] + " ";
-                }
-                if(wordFrequency.containsKey(sentence)){
-                  wordFrequency.put(sentence, wordFrequency.get(sentence) + 1);
-                }
-                else{
-                  wordFrequency.put(sentence, 1);
-                }
+              if(wordFrequency.containsKey(words[i + 1])){
+                wordFrequency.put(words[i + 1], wordFrequency.get(words[i + 1]) + 1);
+              }
+              else{
+                wordFrequency.put(words[i + 1], 1);
               }
             }
           }
@@ -171,7 +165,7 @@ class Predict implements Command {
               return entry2.getValue().compareTo(entry1.getValue());
             }
           });
-          System.out.println("the internet tend to make a reader will be distracted by the internet tend to make a reader will be");
+          System.out.println(sortedWordFrequency.get(0).getKey());
           
 
 
