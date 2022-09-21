@@ -68,7 +68,7 @@ public class Launcher {
             });
             //print the 3 most frequent words
             for(int i = 0; i < 3; i++){
-              System.out.println(sortedWordFrequency.get(i).getKey() + " : " + sortedWordFrequency.get(i).getValue());
+              System.out.println(sortedWordFrequency.get(i).getKey());
             }
           }
 
@@ -85,7 +85,32 @@ public class Launcher {
 }
     
 
+//
+// public class Launcher { 
+  
+//   public static void main(String[] args) {
+//     System.out.println("Bienvenue");
 
+//     //une variable une instance de la classe java.util.Scanner dont le constructeur prendra comme paramètre System.in 
+//     var scanner = new java.util.Scanner(System.in);
+//     Fibo fibonacci = new Fibo();
+//     Quit quit = new Quit();
+//     Freq freq = new Freq();
+
+//     //while input != quit or fibo  print "unknown command" and ask for input again
+//     String input = null;
+//     while (quit.quit(input = scanner.nextLine())) {
+//       if (input.equals("freq")) {
+//         freq.frequency(input);
+//       }
+//       if (input.equals("fibo")) {
+//         fibonacci.fibo();
+//       }
+//       System.out.println("unknown command");
+//     }
+
+//   }
+// }
 
 
 
