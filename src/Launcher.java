@@ -147,25 +147,24 @@ class Predict implements Command {
           System.out.println("Le mot n'est pas dans le fichier");
         }
         else{
-          //check statisticly the most probable sentence of 20 words with the word
+          //check statisticly the most probable sentence of 20 words after the word
           java.util.HashMap<String, Integer> wordFrequency = new java.util.HashMap<String, Integer>();
           for(int i = 0; i < words.length; i++){
             if(words[i].equals(word)){
-              String sentence = "";
-              for(int j = i; j < i + 20; j++){
-                if(j < words.length){
+              if(i + 20 < words.length){
+                String sentence = "";
+                for(int j = i + 1; j < i + 21; j++){
                   sentence += words[j] + " ";
                 }
-              }
-              if(wordFrequency.containsKey(sentence)){
-                wordFrequency.put(sentence, wordFrequency.get(sentence) + 1);
-              }
-              else{
-                wordFrequency.put(sentence, 1);
+                if(wordFrequency.containsKey(sentence)){
+                  wordFrequency.put(sentence, wordFrequency.get(sentence) + 1);
+                }
+                else{
+                  wordFrequency.put(sentence, 1);
+                }
               }
             }
           }
-          //print the most probable sentence
           java.util.List<java.util.Map.Entry<String, Integer>> sortedWordFrequency = new java.util.ArrayList<java.util.Map.Entry<String, Integer>>(wordFrequency.entrySet());
           java.util.Collections.sort(sortedWordFrequency, new java.util.Comparator<java.util.Map.Entry<String, Integer>>(){
             public int compare(java.util.Map.Entry<String, Integer> entry1, java.util.Map.Entry<String, Integer> entry2){
@@ -173,8 +172,6 @@ class Predict implements Command {
             }
           });
           System.out.println(sortedWordFrequency.get(0).getKey());
-          
-
           
 
 
