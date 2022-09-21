@@ -66,10 +66,16 @@ public class Launcher {
                 return entry2.getValue().compareTo(entry1.getValue());
               }
             });
+            String sentence = "";
             //print the 3 most frequent words
-            for(int i = 0; i < 3; i++){
-              System.out.println(sortedWordFrequency.get(i).getKey());
-            }
+            // for(int i = 0; i < 3; i++){
+            //   System.out.println(sortedWordFrequency.get(i).getKey());
+              
+            // }
+            sentence += sortedWordFrequency.get(0).getKey() + " ";
+            sentence += sortedWordFrequency.get(1).getKey() + " ";
+            sentence += sortedWordFrequency.get(2).getKey();
+            System.out.println(sentence);
           }
 
         } catch (java.io.IOException e) {
