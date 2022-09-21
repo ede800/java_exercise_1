@@ -1,6 +1,8 @@
 import java.util.Scanner;
 
 
+//refactoring de la classe Launcher
+
 public class Launcher { 
   public static void main(String[] args) {
   System.out.println("Bienvenue");
@@ -34,9 +36,6 @@ public class Launcher {
 
 
 
-
-
-
 interface Command {
   public String name();
   public boolean run(Scanner scanner); 
@@ -52,21 +51,17 @@ class Quit implements Command {
   }
 }
 
-// refactored Fibo
 
+
+// refactoring de la classe Fibo
 class Fibo implements Command {
   public String name() {
     return "fibo";
   }
   public boolean run(Scanner scanner) {
-    System.out.println("Donnez moi un nombre");
-    String number = scanner.nextLine();
-    try {
-      int numberInt = Integer.parseInt(number);
-      System.out.println("Le nombre de fibonacci est " + fibonacci(numberInt));
-    } catch (NumberFormatException e) {
-      System.out.println("Vous n'avez pas entré un nombre");
-    }
+    System.out.println("Entrez un nombre");
+    int n = scanner.nextInt();
+    System.out.println(fibonacci(n));
     return false;
   }
   public static int fibonacci(int n) {
@@ -75,23 +70,22 @@ class Fibo implements Command {
   }
 }
 
+
+// refactoring de la classe Freq
 class Freq implements Command {
   public String name() {
     return "freq";
   }
   public boolean run(Scanner scanner) {
-    System.out.println("Donnez moi le chemin de votre fichier");
-    String path = scanner.nextLine();
+    System.out.println("Entrez un fichier");
+    String fileName = scanner.nextLine();
     try {
-      String content = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(path)));
-      content = content.replaceAll("[^a-zA-Z0-9\\s]", " ");
-      content = content.toLowerCase();
-      String[] words = content.split("\\s+");
-      if(words.length == 0){
-        System.out.println("Le fichier est vide");
-      }
-      else{
-        java.util.HashMap<String, Integer> wordFrequency = new java.util.HashMap<String, Integer>();
+      java.io.File file = new java.io.File(fileName);
+      java.util.Scanner fileScanner = new java.util.Scanner(file);
+      java.util.HashMap<String, Integer> wordFrequency = new java.util.HashMap<String, Integer>();
+      while (fileScanner.hasNextLine()) {
+        String line = fileScanner.nextLine();
+        String[] words = line.split(" ");
         for(String word : words){
           if(wordFrequency.containsKey(word)){
             wordFrequency.put(word, wordFrequency.get(word) + 1);
@@ -100,18 +94,19 @@ class Freq implements Command {
             wordFrequency.put(word, 1);
           }
         }
-        java.util.List<java.util.Map.Entry<String, Integer>> sortedWordFrequency = new java.util.ArrayList<java.util.Map.Entry<String, Integer>>(wordFrequency.entrySet());
-        java.util.Collections.sort(sortedWordFrequency, new java.util.Comparator<java.util.Map.Entry<String, Integer>>(){
-          public int compare(java.util.Map.Entry<String, Integer> entry1, java.util.Map.Entry<String, Integer> entry2){
-            return entry2.getValue().compareTo(entry1.getValue());
-          }
-        });
-        String sentence = "";
-        sentence += sortedWordFrequency.get(0).getKey() + " ";
-        sentence += sortedWordFrequency.get(1).getKey() + " ";
-        sentence += sortedWordFrequency.get(2).getKey();
-        System.out.println(sentence);
       }
+      //sort the hashmap by value
+      java.util.List<java.util.Map.Entry<String, Integer>> sortedWordFrequency = new java.util.ArrayList<java.util.Map.Entry<String, Integer>>(wordFrequency.entrySet());
+      java.util.Collections.sort(sortedWordFrequency, new java.util.Comparator<java.util.Map.Entry<String, Integer>>(){
+        public int compare(java.util.Map.Entry<String, Integer> entry1, java.util.Map.Entry<String, Integer> entry2){
+          return entry2.getValue().compareTo(entry1.getValue());
+        }
+      });
+      String sentence = "";
+      sentence += sortedWordFrequency.get(0).getKey() + " ";
+      sentence += sortedWordFrequency.get(1).getKey() + " ";
+      sentence += sortedWordFrequency.get(2).getKey();
+      System.out.println(sentence);
     } catch (java.io.IOException e) {
       System.out.println("Le fichier n'existe pas");
     }
@@ -120,66 +115,48 @@ class Freq implements Command {
 }
 
 
+// refactoring de la classe Predict
 class Predict implements Command {
   public String name() {
     return "predict";
   }
   public boolean run(Scanner scanner) {
-    System.out.println("Donnez moi le chemin de votre fichier");
-    String path = scanner.nextLine();
+    System.out.println("Entrez un fichier");
+    String fileName = scanner.nextLine();
     try {
-      String content = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(path)));
-      content = content.replaceAll("[^a-zA-Z0-9\\s]", " ");
-      content = content.toLowerCase();
-      String[] words = content.split("\\s+");
-
-      if(words.length == 0){
-        System.out.println("Le fichier est vide");
+      java.io.File file = new java.io.File(fileName);
+      java.util.Scanner fileScanner = new java.util.Scanner(file);
+      java.util.HashMap<String, java.util.List<String>> wordPredictions = new java.util.HashMap<String, java.util.List<String>>();
+      String previousWord = null;
+      while (fileScanner.hasNextLine()) {
+        String line = fileScanner.nextLine();
+        String[] words = line.split(" ");
+        for(String word : words){
+          if(previousWord != null){
+            if(wordPredictions.containsKey(previousWord)){
+              wordPredictions.get(previousWord).add(word);
+            }
+            else{
+              java.util.List<String> predictions = new java.util.ArrayList<String>();
+              predictions.add(word);
+              wordPredictions.put(previousWord, predictions);
+            }
+          }
+          previousWord = word;
+        }
+      }
+      System.out.println("Entrez un mot");
+      String word = scanner.nextLine();
+      if(wordPredictions.containsKey(word)){
+        java.util.List<String> predictions = wordPredictions.get(word);
+        String sentence = "";
+        sentence += predictions.get(0) + " ";
+        sentence += predictions.get(1) + " ";
+        sentence += predictions.get(2);
+        System.out.println(sentence);
       }
       else{
-        String word = scanner.nextLine();
-        word = word.toLowerCase();
-        // check if the word is not in the file print error
-        if(!java.util.Arrays.asList(words).contains(word)){
-          System.out.println("Le mot n'est pas dans le fichier");
-        }
-        else{
-          //list named mostprobablewords
-          java.util.List<String> mostProbableWords = new java.util.ArrayList<String>();
-          //add word in mostprobablewords
-          mostProbableWords.add(word);
-
-          //check the most probable word after the last word of mostprobablewords and add it to the list
-          for(int i = 0; i < 20; i++){
-            String lastWord = mostProbableWords.get(mostProbableWords.size() - 1);
-            java.util.HashMap<String, Integer> wordFrequency = new java.util.HashMap<String, Integer>();
-            for(int j = 0; j < words.length - 1; j++){
-              if(words[j].equals(lastWord)){
-                if(wordFrequency.containsKey(words[j + 1])){
-                  wordFrequency.put(words[j + 1], wordFrequency.get(words[j + 1]) + 1);
-                }
-                else{
-                  wordFrequency.put(words[j + 1], 1);
-                }
-              }
-            }
-            java.util.List<java.util.Map.Entry<String, Integer>> sortedWordFrequency = new java.util.ArrayList<java.util.Map.Entry<String, Integer>>(wordFrequency.entrySet());
-            java.util.Collections.sort(sortedWordFrequency, new java.util.Comparator<java.util.Map.Entry<String, Integer>>(){
-              public int compare(java.util.Map.Entry<String, Integer> entry1, java.util.Map.Entry<String, Integer> entry2){
-                return entry2.getValue().compareTo(entry1.getValue());
-              }
-            });
-            mostProbableWords.add(sortedWordFrequency.get(0).getKey());
-          }
-          // print the list
-          String sentence = "";
-          for(String w : mostProbableWords){
-            sentence += w + " ";
-          }
-          System.out.println(sentence);
-
-        }           
-        
+        System.out.println("Le mot n'existe pas");
       }
     } catch (java.io.IOException e) {
       System.out.println("Le fichier n'existe pas");
@@ -187,12 +164,4 @@ class Predict implements Command {
     return false;
   }
 }
-  
-  
-
-
-
-
-
-
 
