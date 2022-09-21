@@ -147,7 +147,7 @@ class Predict implements Command {
           System.out.println("Le mot n'est pas dans le fichier");
         }
         else{
-          //check statisticly the most probable word after the word given
+          //check statisticly the most probable word after the word given 20 times and print it
           java.util.HashMap<String, Integer> wordFrequency = new java.util.HashMap<String, Integer>();
           for(int i = 0; i < words.length - 1; i++){
             if(words[i].equals(word)){
@@ -165,7 +165,17 @@ class Predict implements Command {
               return entry2.getValue().compareTo(entry1.getValue());
             }
           });
-          System.out.println(sortedWordFrequency.get(0).getKey());
+          String sentence = "";
+          sentence += sortedWordFrequency.get(0).getKey() + " ";
+          sentence += sortedWordFrequency.get(1).getKey() + " ";
+          sentence += sortedWordFrequency.get(2).getKey();
+          
+
+          System.out.println(sentence);
+
+
+          
+          // 
           
 
 
