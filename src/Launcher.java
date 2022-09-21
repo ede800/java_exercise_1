@@ -147,35 +147,40 @@ class Predict implements Command {
           System.out.println("Le mot n'est pas dans le fichier");
         }
         else{
-          //check statisticly the most probable word after the word given 20 times and print it
-          java.util.HashMap<String, Integer> wordFrequency = new java.util.HashMap<String, Integer>();
-          for(int i = 0; i < words.length - 1; i++){
-            if(words[i].equals(word)){
-              if(wordFrequency.containsKey(words[i + 1])){
-                wordFrequency.put(words[i + 1], wordFrequency.get(words[i + 1]) + 1);
-              }
-              else{
-                wordFrequency.put(words[i + 1], 1);
+          //list named mostprobablewords
+          java.util.List<String> mostProbableWords = new java.util.ArrayList<String>();
+          //add word in mostprobablewords
+          mostProbableWords.add(word);
+
+          //check the most probable word after the last word of mostprobablewords and add it to the list
+          for(int i = 0; i < 20; i++){
+            String lastWord = mostProbableWords.get(mostProbableWords.size() - 1);
+            java.util.HashMap<String, Integer> wordFrequency = new java.util.HashMap<String, Integer>();
+            for(int j = 0; j < words.length - 1; j++){
+              if(words[j].equals(lastWord)){
+                if(wordFrequency.containsKey(words[j + 1])){
+                  wordFrequency.put(words[j + 1], wordFrequency.get(words[j + 1]) + 1);
+                }
+                else{
+                  wordFrequency.put(words[j + 1], 1);
+                }
               }
             }
+            java.util.List<java.util.Map.Entry<String, Integer>> sortedWordFrequency = new java.util.ArrayList<java.util.Map.Entry<String, Integer>>(wordFrequency.entrySet());
+            java.util.Collections.sort(sortedWordFrequency, new java.util.Comparator<java.util.Map.Entry<String, Integer>>(){
+              public int compare(java.util.Map.Entry<String, Integer> entry1, java.util.Map.Entry<String, Integer> entry2){
+                return entry2.getValue().compareTo(entry1.getValue());
+              }
+            });
+            mostProbableWords.add(sortedWordFrequency.get(0).getKey());
           }
-          java.util.List<java.util.Map.Entry<String, Integer>> sortedWordFrequency = new java.util.ArrayList<java.util.Map.Entry<String, Integer>>(wordFrequency.entrySet());
-          java.util.Collections.sort(sortedWordFrequency, new java.util.Comparator<java.util.Map.Entry<String, Integer>>(){
-            public int compare(java.util.Map.Entry<String, Integer> entry1, java.util.Map.Entry<String, Integer> entry2){
-              return entry2.getValue().compareTo(entry1.getValue());
-            }
-          });
+          // print the list
           String sentence = "";
-          sentence += sortedWordFrequency.get(0).getKey() + " ";
-          sentence += sortedWordFrequency.get(1).getKey() + " ";
-          sentence += sortedWordFrequency.get(2).getKey();
-          
-
+          for(String w : mostProbableWords){
+            sentence += w + " ";
+          }
           System.out.println(sentence);
-
-
           
-          // 
           
 
 
