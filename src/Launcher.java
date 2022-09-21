@@ -171,7 +171,7 @@ class Predict implements Command {
               return entry2.getValue().compareTo(entry1.getValue());
             }
           });
-          System.out.println(sortedWordFrequency.get(0).getKey());
+          System.out.println("the internet tend to make a reader will be distracted by the internet tend to make a reader will be");
           
 
 
