@@ -9,11 +9,11 @@ public class Launcher {
   public static void main(String[] args) {
   System.out.println("Bienvenue");
   var scanner = new java.util.Scanner(System.in);
-  Command[] commands = {
-    new Quit(),
-    new Fibo(),
-    new Freq()
-  };
+  // une variable de type List<Command> et contenant une instance de chaque implémentation de Command
+  java.util.List<Command> commands = new java.util.ArrayList<Command>();
+  commands.add(new Freq());
+  commands.add(new Fibo());
+  commands.add(new Quit());
   String input = null;
   while (!"quit".equals(input = scanner.nextLine())) {
     boolean found = false;
@@ -28,14 +28,10 @@ public class Launcher {
       System.out.println("unknown command");
     }
   }
-  
-    
-    
-  
 }
     
     
-    }
+}
     
 
 
@@ -117,6 +113,66 @@ class Freq implements Command {
         sentence += sortedWordFrequency.get(1).getKey() + " ";
         sentence += sortedWordFrequency.get(2).getKey();
         System.out.println(sentence);
+      }
+    } catch (java.io.IOException e) {
+      System.out.println("Le fichier n'existe pas");
+    }
+    return false;
+  }
+}
+
+
+class Predict implements Command {
+  public String name() {
+    return "predict";
+  }
+  public boolean run(Scanner scanner) {
+    System.out.println("Donnez moi le chemin de votre fichier");
+    String path = scanner.nextLine();
+    try {
+      String content = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(path)));
+      content = content.replaceAll("[^a-zA-Z0-9\\s]", " ");
+      content = content.toLowerCase();
+      String[] words = content.split("\\s+");
+
+      if(words.length == 0){
+        System.out.println("Le fichier est vide");
+      }
+      else{
+        String word = scanner.nextLine();
+        word = word.toLowerCase();
+        // check if the word is not in the file print error
+        if(!java.util.Arrays.asList(words).contains(word)){
+          System.out.println("Le mot n'est pas dans le fichier");
+        }
+        else{
+          //check statisticly the most probable sentence of 20 words with the word
+          java.util.HashMap<String, Integer> wordFrequency = new java.util.HashMap<String, Integer>();
+          for(int i = 0; i < words.length; i++){
+            if(words[i].equals(word)){
+              String sentence = "";
+              for(int j = i; j < i + 20; j++){
+                if(j < words.length){
+                  sentence += words[j] + " ";
+                }
+              }
+              if(wordFrequency.containsKey(sentence)){
+                wordFrequency.put(sentence, wordFrequency.get(sentence) + 1);
+              }
+              else{
+                wordFrequency.put(sentence, 1);
+              }
+            }
+          }
+
+          
+
+
+        }
+
+        
+        
+        
       }
     } catch (java.io.IOException e) {
       System.out.println("Le fichier n'existe pas");
