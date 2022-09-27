@@ -37,11 +37,6 @@ public class Launcher {
 
 
 
-interface Command {
-  public String name();
-  public boolean run(Scanner scanner); 
-  
-}
 
 
 
